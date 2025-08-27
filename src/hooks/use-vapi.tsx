@@ -24,7 +24,7 @@ const useVapi = () => {
         setIsSessionActive(true);
       });
 
-      vapiInstance.on("call-end", (data) => {
+      vapiInstance.on("call-end", () => {
         setIsSessionActive(false);
         setConversation([]);
         navigate.push("/call-history");

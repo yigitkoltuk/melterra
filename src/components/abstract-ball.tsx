@@ -5,8 +5,7 @@ import { motion } from "framer-motion";
 import { Mic, MicOff } from "lucide-react";
 import useVapi from "@/hooks/use-vapi";
 
-const RadialCard: React.FC = () => {
-  const { volumeLevel, isSessionActive, toggleCall } = useVapi();
+const RadialCard = ({ isSessionActive, volumeLevel, toggleCall }) => {
   const [bars, setBars] = useState(Array(50).fill(0));
 
   useEffect(() => {
