@@ -3,21 +3,6 @@ import { neon } from "@neondatabase/serverless";
 // Neon bağlantısı
 const sql = neon(process.env.DATABASE_URL!);
 
-// Tablonun var olup olmadığını kontrol et ve yoksa oluştur
-async function ensureTableExists() {
-  try {
-    await sql`
-      CREATE TABLE IF NOT EXISTS analytics_requests (
-        id SERIAL PRIMARY KEY,
-        body TEXT,
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-      );
-    `;
-  } catch (error) {
-    console.error("Tablo kontrol/oluşturma hatası:", error);
-  }
-}
-
 export async function POST(request: Request) {
   let bodyText = "";
   let dbResult = null;
@@ -26,20 +11,25 @@ export async function POST(request: Request) {
       bodyText = await request.text();
       console.log("Request body:", bodyText);
 
+      // Tüm eski kayıtları sil
+      await sql`DELETE FROM analytics_requests;`;
+
+      // Yeni veriyi ekle
       dbResult = await sql`
         INSERT INTO analytics_requests (body) VALUES (${bodyText}) RETURNING id, created_at;
       `;
     } catch (e) {
       console.log("Request body okunamadı veya DB hatası:", e);
+      const errorMessage = e instanceof Error ? e.message : String(e);
       return Response.json(
-        { error: "Body veya DB hatası", details: e.message },
+        { error: "Body veya DB hatası", details: errorMessage },
         { status: 500 }
       );
     }
   }
   // Kayıt sonucu ile response
   return Response.json({
-    message: "POST request bilgileri loglandı",
+    message: "POST request bilgileri loglandı (eski veriler silindi)",
     dbResult,
   });
 }
@@ -47,7 +37,6 @@ export async function POST(request: Request) {
 // GET endpoint: Tüm kayıtları döndür
 export async function GET() {
   try {
-    ensureTableExists();
     const allRecords =
       await sql`SELECT * FROM analytics_requests ORDER BY created_at DESC;`;
     return Response.json({
