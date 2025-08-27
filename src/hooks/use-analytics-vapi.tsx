@@ -16,6 +16,7 @@ export function useAnalyticsVapi() {
       setLoading(true);
       setError(null);
       try {
+        await new Promise((resolve) => setTimeout(resolve, 8000));
         const res = await fetch("/api/analytics", { method: "GET" });
         const data = await res.json();
         if (res.ok && Array.isArray(data.records)) {
@@ -26,7 +27,7 @@ export function useAnalyticsVapi() {
       } catch (e) {
         setError(e instanceof Error ? e.message : String(e));
       } finally {
-        setTimeout(() => setLoading(false), 10000);
+        setLoading(false);
       }
     }
     fetchAnalytics();

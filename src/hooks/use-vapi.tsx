@@ -27,7 +27,6 @@ const useVapi = () => {
       vapiInstance.on("call-end", () => {
         setIsSessionActive(false);
         setConversation([]);
-        navigate.push("/call-history");
       });
 
       vapiInstance.on("volume-level", (volume: number) => {
@@ -117,11 +116,18 @@ const useVapi = () => {
   }, [initializeVapi]);
 
   const toggleCall = async (language: string = "english") => {
+    const firstMessage = {
+      en: " Hello there! I'm SiteMate, your construction site buddy. Are you new to the construction site?",
+      de: " Hallo! Ich bin SiteMate, dein Baustellen-Buddy. Bist du neu auf der Baustelle?",
+      tr: " Merhaba! Ben SiteMate, inşaat sahası arkadaşınız. Siz inşaat sahasına yeni misiniz?",
+    };
+
     try {
       if (isSessionActive) {
         await vapiRef.current.stop();
       } else {
         await vapiRef.current.start(assistantId, {
+          firstMessage: firstMessage[language as keyof typeof firstMessage],
           model: {
             provider: "openai",
             model: "gpt-4o",
