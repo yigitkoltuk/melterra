@@ -3,6 +3,21 @@ import { neon } from "@neondatabase/serverless";
 // Neon bağlantısı
 const sql = neon(process.env.DATABASE_URL!);
 
+// Tablonun var olup olmadığını kontrol et ve yoksa oluştur
+async function ensureTableExists() {
+  try {
+    await sql`
+      CREATE TABLE IF NOT EXISTS analytics_requests (
+        id SERIAL PRIMARY KEY,
+        body TEXT,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `;
+  } catch (error) {
+    console.error("Tablo kontrol/oluşturma hatası:", error);
+  }
+}
+
 export async function POST(request: Request) {
   let bodyText = "";
   let dbResult = null;
@@ -32,6 +47,7 @@ export async function POST(request: Request) {
 // GET endpoint: Tüm kayıtları döndür
 export async function GET() {
   try {
+    ensureTableExists();
     const allRecords =
       await sql`SELECT * FROM analytics_requests ORDER BY created_at DESC;`;
     return Response.json({
