@@ -28,3 +28,21 @@ export async function POST(request: Request) {
     dbResult,
   });
 }
+
+// GET endpoint: Tüm kayıtları döndür
+export async function GET() {
+  try {
+    const allRecords =
+      await sql`SELECT * FROM analytics_requests ORDER BY created_at DESC;`;
+    return Response.json({
+      message: "Tüm analytics_requests kayıtları",
+      records: allRecords,
+    });
+  } catch (e) {
+    const errorMessage = e instanceof Error ? e.message : String(e);
+    return Response.json(
+      { error: "DB hatası", details: errorMessage },
+      { status: 500 }
+    );
+  }
+}
