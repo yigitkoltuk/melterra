@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.1",
     "@vapi-ai/web": "^2.3.9",
     "framer-motion": "^12.23.12",
     "gsap": "^3.13.0",
