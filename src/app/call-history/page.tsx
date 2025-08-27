@@ -247,7 +247,7 @@ const CallRecordDashboard: React.FC = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div className="grid grid-cols-1 gap-8 mb-8">
           {/* Genel Bilgiler */}
           <DataSection title="Genel Bilgiler" icon={FileText}>
             <div className="space-y-1">
@@ -255,11 +255,6 @@ const CallRecordDashboard: React.FC = () => {
                 label="Çağrı Süresi"
                 value={formatDuration(bodyData.durationSeconds)}
                 description="Çağrının toplam süresi"
-              />
-              <InfoRow
-                label="Toplam Maliyet"
-                value={formatCurrency(bodyData.cost)}
-                description="Bu çağrının API kullanım maliyeti"
               />
               <InfoRow
                 label="Başlama Zamanı"
@@ -279,42 +274,6 @@ const CallRecordDashboard: React.FC = () => {
                     : "Asistan Kapattı"
                 }
                 description="Çağrıyı kim sonlandırdı"
-              />
-            </div>
-          </DataSection>
-
-          {/* Asistan Bilgileri */}
-          <DataSection title="Asistan Bilgileri" icon={User} color="blue">
-            <div className="space-y-1">
-              <InfoRow
-                label="Asistan Adı"
-                value={bodyData.assistant?.name || "Bilinmeyen"}
-                description="Çağrıyı yöneten yapay zeka asistanı"
-              />
-              <InfoRow
-                label="Ses ID"
-                value={bodyData.assistant?.voice?.voiceId || "Belirtilmemiş"}
-                description="Kullanılan ses profili"
-              />
-              <InfoRow
-                label="Ses Sağlayıcısı"
-                value={bodyData.assistant?.voice?.provider || "Belirtilmemiş"}
-                description="Ses teknolojisi sağlayıcısı"
-              />
-              <InfoRow
-                label="Başarı Durumu"
-                value={
-                  bodyData.analysis?.successEvaluation === "true" ? (
-                    <span className="text-green-600 font-semibold">
-                      Başarılı ✓
-                    </span>
-                  ) : (
-                    <span className="text-red-600 font-semibold">
-                      Başarısız ✗
-                    </span>
-                  )
-                }
-                description="Çağrının amacına ulaşıp ulaşmadığı"
               />
             </div>
           </DataSection>
@@ -346,28 +305,6 @@ const CallRecordDashboard: React.FC = () => {
             color="indigo"
           >
             <div className="space-y-4">
-              {/* Transkript Kontrol Butonları */}
-              <div className="flex flex-wrap gap-2 mb-4">
-                <button
-                  onClick={copyTranscriptToClipboard}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
-                    copiedTranscript
-                      ? "bg-green-100 text-green-700"
-                      : "bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
-                  }`}
-                >
-                  <Copy className="w-4 h-4" />
-                  <span>{copiedTranscript ? "Kopyalandı!" : "Kopyala"}</span>
-                </button>
-                <button
-                  onClick={downloadTranscript}
-                  className="flex items-center space-x-2 px-4 py-2 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 transition-colors"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>İndir</span>
-                </button>
-              </div>
-
               {/* Transkript İstatistikleri */}
               {bodyData.transcript && (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
@@ -458,64 +395,6 @@ const CallRecordDashboard: React.FC = () => {
                   </div>
                 )}
               </div>
-
-              {/* Ham Transkript (İsteğe bağlı) */}
-              {bodyData.transcript && (
-                <details className="mt-4">
-                  <summary className="cursor-pointer text-sm text-indigo-600 hover:text-indigo-800 font-medium">
-                    Ham Transkripti Göster
-                  </summary>
-                  <div className="mt-2 bg-gray-900 text-green-400 p-3 rounded-lg overflow-x-auto">
-                    <pre className="text-xs whitespace-pre-wrap font-mono">
-                      {bodyData.transcript}
-                    </pre>
-                  </div>
-                </details>
-              )}
-            </div>
-          </DataSection>
-        </div>
-
-        {/* Maliyet Dağılımı */}
-        <div className="mb-8">
-          <DataSection
-            title="Maliyet Detayları"
-            icon={DollarSign}
-            color="emerald"
-          >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center p-3 bg-emerald-50 rounded-lg">
-                <div className="text-sm text-emerald-600 mb-1">
-                  Konuşmayı Yazıya Çevirme
-                </div>
-                <div className="text-lg font-bold text-emerald-800">
-                  {formatCurrency(bodyData.costBreakdown?.stt || 0)}
-                </div>
-              </div>
-              <div className="text-center p-3 bg-emerald-50 rounded-lg">
-                <div className="text-sm text-emerald-600 mb-1">
-                  Yapay Zeka Modeli
-                </div>
-                <div className="text-lg font-bold text-emerald-800">
-                  {formatCurrency(bodyData.costBreakdown?.llm || 0)}
-                </div>
-              </div>
-              <div className="text-center p-3 bg-emerald-50 rounded-lg">
-                <div className="text-sm text-emerald-600 mb-1">
-                  Yazıyı Sese Çevirme
-                </div>
-                <div className="text-lg font-bold text-emerald-800">
-                  {formatCurrency(bodyData.costBreakdown?.tts || 0)}
-                </div>
-              </div>
-              <div className="text-center p-3 bg-emerald-100 rounded-lg border-2 border-emerald-300">
-                <div className="text-sm text-emerald-700 mb-1 font-semibold">
-                  TOPLAM
-                </div>
-                <div className="text-lg font-bold text-emerald-900">
-                  {formatCurrency(bodyData.costBreakdown?.total || 0)}
-                </div>
-              </div>
             </div>
           </DataSection>
         </div>
@@ -529,9 +408,7 @@ const CallRecordDashboard: React.FC = () => {
                   <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
                     <div className="flex items-center space-x-2">
                       <Volume2 className="w-5 h-5 text-purple-600" />
-                      <span className="font-medium text-purple-700">
-                        Tekli Kanal Kayıt
-                      </span>
+                      <span className="font-medium text-purple-700">Kayıt</span>
                     </div>
                     <a
                       href={bodyData.recordingUrl}
@@ -539,25 +416,7 @@ const CallRecordDashboard: React.FC = () => {
                       rel="noopener noreferrer"
                       className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
                     >
-                      Dinle / İndir
-                    </a>
-                  </div>
-                )}
-                {bodyData.stereoRecordingUrl && (
-                  <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
-                    <div className="flex items-center space-x-2">
-                      <Headphones className="w-5 h-5 text-purple-600" />
-                      <span className="font-medium text-purple-700">
-                        Stereo Kayıt
-                      </span>
-                    </div>
-                    <a
-                      href={bodyData.stereoRecordingUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-                    >
-                      Dinle / İndir
+                      Dinle
                     </a>
                   </div>
                 )}
@@ -627,17 +486,6 @@ const CallRecordDashboard: React.FC = () => {
                         ms
                       </div>
                     </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-gray-700 mb-2">
-                    Ham Veri (Geliştiriciler İçin):
-                  </h4>
-                  <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto max-h-96">
-                    <pre className="text-xs whitespace-pre-wrap">
-                      {JSON.stringify(bodyData, null, 2)}
-                    </pre>
                   </div>
                 </div>
               </div>
