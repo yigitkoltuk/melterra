@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Vapi from "@vapi-ai/web";
+import { useRouter } from "next/navigation";
 
 const publicKey = process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY || ""; // Replace with your actual public key
 const assistantId = process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID || ""; // Replace with your actual assistant ID
 
 const useVapi = () => {
+  const navigate = useRouter();
   const [volumeLevel, setVolumeLevel] = useState(0);
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -23,9 +25,9 @@ const useVapi = () => {
       });
 
       vapiInstance.on("call-end", (data) => {
-        console.log("Call ended:", data);
         setIsSessionActive(false);
-        setConversation([]); // Reset conversation on call end
+        setConversation([]);
+        navigate.push("/call-history");
       });
 
       vapiInstance.on("volume-level", (volume: number) => {
