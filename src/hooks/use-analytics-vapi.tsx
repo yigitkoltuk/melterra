@@ -26,7 +26,7 @@ export function useAnalyticsVapi() {
       } catch (e) {
         setError(e instanceof Error ? e.message : String(e));
       } finally {
-        setLoading(false);
+        setTimeout(() => setLoading(false), 5000);
       }
     }
     fetchAnalytics();
