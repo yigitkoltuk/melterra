@@ -118,9 +118,9 @@ const useVapi = () => {
 
   const toggleCall = async (language: string = "english") => {
     const firstMessage = {
-      en: "Guten Tag! I'm BauMeister, your German construction site training specialist. I'm here to help you prepare for working on German construction sites. Are you new to working in Germany, or do you have some experience already?",
-      de: "Guten Tag! Ich bin BauMeister, Ihr deutscher Baustellen-Ausbildungsspezialist. Ich helfe Ihnen dabei, sich auf die Arbeit auf deutschen Baustellen vorzubereiten. Sind Sie neu in der Arbeit in Deutschland oder haben Sie schon etwas Erfahrung?",
-      tr: "Guten Tag! Ben BauMeister, Alman inşaat sahası eğitim uzmanınızım. Alman inşaat sahalarında çalışmaya hazırlanmanızda size yardımcı olmak için buradayım. Almanya'da çalışmaya yeni mi başlıyorsunuz, yoksa daha önceden deneyiminiz var mı?",
+      en: "Hey there! I'm BauMeister. I've been working on German construction sites for years now. Thought I'd share what I've learned with folks who are getting into the game here. So, have you worked in Germany before, or are you just starting out?",
+      de: "Hallo! Ich bin BauMeister. Arbeite schon seit Jahren auf deutschen Baustellen. Dachte mir, ich teile mal meine Erfahrungen mit Leuten, die hier anfangen wollen. Hast du schon mal in Deutschland gearbeitet oder fängst du gerade erst an?",
+      tr: "Selam! Ben BauMeister. Yıllardır Alman şantiyelerinde çalışıyorum. Burada işe başlayacak insanlara deneyimlerimi aktarmaya karar verdim. Sen daha önce Almanya'da çalıştın mı, yoksa yeni mi başlıyorsun?",
     };
 
     try {
@@ -206,7 +206,6 @@ Unutma: Sen eğitmen değil, deneyimli bir çalışma arkadaşısın. İnsanlara
       console.error("Error toggling Vapi session:", err);
     }
   };
-
   const sendMessage = (role: string, content: string) => {
     if (vapiRef.current) {
       vapiRef.current.send({
