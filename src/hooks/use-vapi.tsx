@@ -27,6 +27,7 @@ const useVapi = () => {
       vapiInstance.on("call-end", () => {
         setIsSessionActive(false);
         setConversation([]);
+        navigate.push("/call-history");
       });
 
       vapiInstance.on("volume-level", (volume: number) => {
