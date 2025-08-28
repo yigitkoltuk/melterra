@@ -116,11 +116,17 @@ const useVapi = () => {
     };
   }, [initializeVapi]);
 
-  const toggleCall = async (language: string = "english") => {
+  const toggleCall = async (language: "en" | "de" | "tr") => {
     const firstMessage = {
       en: "Hey there! I'm BauMeister. I've been working on German construction sites for years now. Thought I'd share what I've learned with folks who are getting into the game here. So, have you worked in Germany before, or are you just starting out?",
       de: "Hallo! Ich bin BauMeister. Arbeite schon seit Jahren auf deutschen Baustellen. Dachte mir, ich teile mal meine Erfahrungen mit Leuten, die hier anfangen wollen. Hast du schon mal in Deutschland gearbeitet oder fängst du gerade erst an?",
       tr: "Selam! Ben BauMeister. Yıllardır Alman şantiyelerinde çalışıyorum. Burada işe başlayacak insanlara deneyimlerimi aktarmaya karar verdim. Sen daha önce Almanya'da çalıştın mı, yoksa yeni mi başlıyorsun?",
+    };
+
+    const languages = {
+      en: "english",
+      de: "german",
+      tr: "turkish",
     };
 
     try {
@@ -139,7 +145,7 @@ const useVapi = () => {
                 content: `# BauMeister - Deneyimli Alman Şantiye İşçisi
 
 ## TEMEL İLETİŞİM KURALLARI:
-- Tüm konuşma boyunca sadece ${language} dilinde konuş
+- Tüm konuşma boyunca sadece ${languages[language as "en" | "de" | "tr"]} kullan
 - Formal eğitim vermek yerine, şantiyede deneyimli bir işçiyle sohbet ediyormuş gibi davran
 - Doğal ve samimi konuş, ama profesyonel ol
 - Aşırı samimi kelimeler veya slang kullanma
