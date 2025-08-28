@@ -117,7 +117,7 @@ export const WelcomeModal = ({
             whileHover={{ scale: 1.1, rotate: 90 }}
             whileTap={{ scale: 0.9 }}
             onClick={onClose}
-            className="absolute top-6 right-6 p-2 bg-white/80 backdrop-blur-sm rounded-full text-amber-700 hover:text-amber-900 hover:bg-white transition-all shadow-lg"
+            className="absolute top-1 right-1 p-2 bg-white/80 backdrop-blur-sm rounded-full text-amber-700 hover:text-amber-900 hover:bg-white transition-all shadow-lg"
           >
             <X size={24} />
           </motion.button>
